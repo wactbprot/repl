@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en" class="h-100">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="az table">
+    <meta name="author" content="wactbprot">
+    <title>AZ-Liste</title>
+
+    <!-- Bootstrap core CSS -->
+<link href="../css/bootstrap.min.css" rel="stylesheet" >
+<link href="../css/datatables.min.css" rel="stylesheet">
+
+<style>
+ #net {
+     width: 1400px;
+     height: 900px;
+     border: 1px solid lightgray;
+ }  
+</style>
+<!-- Custom styles for this template -->
+<link rel="shortcut icon" href="../logo/favicon.ico">
+  </head>
+  <body class="d-flex flex-column h-10">
+    <header>
+      <nav class="navbar navbar-expand-md">
+      </nav>
+    </header>
+    
+    <main role="main" class="flex-shrink-0">
+      <div id="net" class="container-fluid">
+  </div>
+</main>
+
+<footer class="footer mt-auto py-3">
+  <div class="container">
+    <span class="text-muted">.</span>
+  </div>
+</footer>
+
+<script type="text/javascript" charset="utf8" src="../js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" charset="utf8" src="../js/popper.min.js"></script>
+<script type="text/javascript" charset="utf8" src="../js/bootstrap.min.js"></script>
+ <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+ <script type="text/javascript" charset="utf8">
+    // create an array with nodes
+   var nodes = new vis.DataSet([
+       {% for job in jobs %}
+       {id: {{loop.index}}, label: "{{job.source}}" , group:"switch" },
+       {%endfor%}
+    ]);
+
+    // create an array with edges
+    var edges = new vis.DataSet([
+        {from: 1, to: 3},
+        {from: 1, to: 2},
+        {from: 2, to: 4},
+        {from: 2, to: 5}
+    ]);
+
+    // create a network
+    var container = document.getElementById('net');
+
+    // provide the data in the vis format
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+  
+   var options = {
+    edges: {
+      smooth: false
+    },
+    groups: {
+      switch: {
+        shape: "box",
+        color: "#FF9900" // orange
+      }}}
+    // initialize your network!
+   var network = new vis.Network(container, data, options);
+
+   window.addEventListener("load", () => {
+       draw();
+   });
+ </script>
+</body>
+</html>
