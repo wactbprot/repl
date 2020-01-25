@@ -1,6 +1,6 @@
 {
   "db":{
-    "host": "a73434.berlin.ptb.de",
+    "host": "localhost",
     "port": 5984
   },
   "server": {

@@ -43,21 +43,17 @@
 <script type="text/javascript" charset="utf8" src="../js/bootstrap.min.js"></script>
  <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
  <script type="text/javascript" charset="utf8">
-    // create an array with nodes
    var nodes = new vis.DataSet([
-       {% for job in jobs %}
-       {id: {{loop.index}}, label: "{{job.source}}" , group:"switch" },
-       {%endfor%}
-    ]);
-
-    // create an array with edges
-    var edges = new vis.DataSet([
-        {from: 1, to: 3},
-        {from: 1, to: 2},
-        {from: 2, to: 4},
-        {from: 2, to: 5}
-    ]);
-
+     {% for node in nodes %}
+     {id: {{node.id}}, label: "{{node.label}}" , group: "{{node.group}}" },
+     {%endfor%}
+   ]);
+   var edges = new vis.DataSet([
+     {% for edge in edges %}
+     {from: {{edge.from}}, to: {{edge.to}} ,  arrows:"{{edge.arrow_type}}"},
+     {%endfor%}
+   ]);
+   
     // create a network
     var container = document.getElementById('net');
 
@@ -72,16 +68,16 @@
       smooth: false
     },
     groups: {
-      switch: {
+      server: {
         shape: "box",
         color: "#FF9900" // orange
+      },
+    db: {
+        shape: "box"
       }}}
     // initialize your network!
    var network = new vis.Network(container, data, options);
 
-   window.addEventListener("load", () => {
-       draw();
-   });
  </script>
 </body>
 </html>

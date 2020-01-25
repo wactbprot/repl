@@ -1,6 +1,5 @@
 import json
 import datetime
-import requests
 import re
 from flask import Flask, request, jsonify, send_from_directory, render_template
 from flask_cors import CORS
@@ -13,11 +12,11 @@ CORS(app)
 
 @app.route('/repl/all.html', methods=['GET'])
 def repl_all():
-    req = requests.get("http://{}:{}/_scheduler/jobs".format(config["db"]["host"], config["db"]["port"]))
-    res = req.json()
-
+    jobs = utils.get_jobs(config["db"]["host"], config["db"]["port"])
+    gen = utils.gen_count()
+    nodes, edges = utils.get_nodes_and_edges(jobs, gen, {}, {})
     template = utils.path_file(path=config['templates']['html'], file='all.html')
-    return render_template(template, jobs=res.get("jobs", []))
+    return render_template(template, nodes=nodes, edges=edges)
 
 @app.route('/js/<fn>', methods=['get'])
 def js_folder(fn):
