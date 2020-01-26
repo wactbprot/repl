@@ -5,20 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="az table">
     <meta name="author" content="wactbprot">
-    <title>AZ-Liste</title>
+    <title>repl graph</title>
 
     <!-- Bootstrap core CSS -->
 <link href="../css/bootstrap.min.css" rel="stylesheet" >
 <link href="../css/datatables.min.css" rel="stylesheet">
 
 <style>
- #net {
-     width: 1400px;
-     height: 900px;
-     border: 1px solid lightgray;
- }  
+  body {
+      color: #d3d3d3;
+      font: 12pt arial;
+      background-color: #222222;
+  }
+  #net {
+      width: 1400px;
+      height: 900px;
+      border: 1px solid #444444;
+      background-color: #222222;
+  }
 </style>
-<!-- Custom styles for this template -->
+
 <link rel="shortcut icon" href="../logo/favicon.ico">
   </head>
   <body class="d-flex flex-column h-10">
@@ -41,24 +47,21 @@
 <script type="text/javascript" charset="utf8" src="../js/jquery-3.4.1.min.js"></script>
 <script type="text/javascript" charset="utf8" src="../js/popper.min.js"></script>
 <script type="text/javascript" charset="utf8" src="../js/bootstrap.min.js"></script>
- <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
- <script type="text/javascript" charset="utf8">
+<script type="text/javascript" charset="utf8" src="../js/vis-network.min.js"></script>
+<script type="text/javascript" charset="utf8">
    var nodes = new vis.DataSet([
      {% for node in nodes %}
      {id: {{node.id}}, label: "{{node.label}}" , group: "{{node.group}}" },
      {%endfor%}
    ]);
-   var edges = new vis.DataSet([
+
+  var edges = new vis.DataSet([
      {% for edge in edges %}
-     {from: {{edge.from}}, to: {{edge.to}} ,  arrows:"{{edge.arrow_type}}"},
+     {from: {{edge.from}}, to: {{edge.to}} ,  arrows:"{{edge.arrow_type}}" , shadow: { color: "#FF9900" }},
      {%endfor%}
    ]);
-   
-    // create a network
-    var container = document.getElementById('net');
-
-    // provide the data in the vis format
-    var data = {
+  var container = document.getElementById('net');
+  var data = {
         nodes: nodes,
         edges: edges
     };
@@ -70,7 +73,7 @@
     groups: {
       server: {
         shape: "box",
-        color: "#FF9900" // orange
+        color: "#FF9900" 
       },
     db: {
         shape: "box"

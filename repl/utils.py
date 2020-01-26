@@ -39,8 +39,10 @@ def gen_count():
     
 def get_info(url):
     p = urlparse(url)
+
     db = p.path.replace("/","")
     host = p.hostname.split(".")[0]
+
     return db, host
 
 def gen_ext_name(d, h):
@@ -49,15 +51,16 @@ def gen_ext_name(d, h):
 def get_nodes_and_edges(jobs, gen, hosts, dbs):
     nodes = []
     edges = []
-    idx = 0
+    
     for job in jobs:
         s = job.get("source")
         t = job.get("target")
+
         if s and t:
             s_db, s_host = get_info(s)
             t_db, t_host = get_info(t)
-            s_ext_db_name = gen_ext_name(s_db, s_host)
-            t_ext_db_name = gen_ext_name(t_db, t_host)
+            s_db_name = gen_ext_name(s_db, s_host)
+            t_db_name = gen_ext_name(t_db, t_host)
 
             if s_host not in hosts:
                 hosts[s_host] = gen.__next__()
@@ -67,17 +70,16 @@ def get_nodes_and_edges(jobs, gen, hosts, dbs):
                 hosts[t_host] = gen.__next__()
                 nodes.append({"id": hosts[t_host], "label": t_host, "group": "server"})
 
-            if s_ext_db_name not in dbs:
-                dbs[s_ext_db_name] = gen.__next__()
-                nodes.append({"id": dbs[s_ext_db_name], "label": s_db, "group": "db"})
+            if s_db_name not in dbs:
+                dbs[s_db_name] = gen.__next__()
+                nodes.append({"id": dbs[s_db_name], "label": s_db, "group": "db"})
 
-            if t_ext_db_name not in dbs:
-                dbs[t_ext_db_name] = gen.__next__()
-                nodes.append({"id": dbs[t_ext_db_name], "label": t_db, "group": "db"})
-                
-                
-            edges.append({"from": dbs[s_ext_db_name] , "to":dbs[t_ext_db_name] , "arrow_type": "to"})
-            edges.append({"from": hosts[s_host] , "to":dbs[s_ext_db_name], "arrow_type":"box"})
-            edges.append({"from": hosts[t_host] , "to":dbs[t_ext_db_name], "arrow_type":"box"})
+            if t_db_name not in dbs:
+                dbs[t_db_name] = gen.__next__()
+                nodes.append({"id": dbs[t_db_name], "label": t_db, "group": "db"})
+                    
+            edges.append({"from": dbs[s_db_name] , "to":dbs[t_db_name] , "arrow_type": "to" })
+            edges.append({"from": hosts[s_host] , "to":dbs[s_db_name], "arrow_type":"box"})
+            edges.append({"from": hosts[t_host] , "to":dbs[t_db_name], "arrow_type":"box"})
 
     return nodes, edges
